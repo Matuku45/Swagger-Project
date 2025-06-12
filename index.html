@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🎓 Student API Testing Interface</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    h1 { color: #2c3e50; }
+    .endpoint { background: #fff; border-left: 5px solid #3498db; margin: 15px 0; padding: 15px; border-radius: 8px; }
+    input, button, textarea { margin: 5px 0; padding: 8px; width: 100%; }
+    code { background: #eef; padding: 4px 8px; border-radius: 4px; }
+    pre { background: #333; color: #eee; padding: 10px; border-radius: 5px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>🎓 Student API Testing Interface</h1>
+  <p><strong>Base URL:</strong> http://localhost:8000</p>
+
+  <div class="endpoint">
+    <h2>📥 GET /students</h2>
+    <button onclick="getStudents()">Fetch Students</button>
+    <pre id="getResult"></pre>
+  </div>
+
+  <div class="endpoint">
+    <h2>➕ POST /students</h2>
+    <textarea id="postData">{ "name": "Alice", "age": 23 }</textarea>
+    <button onclick="postStudent()">Create Student</button>
+    <pre id="postResult"></pre>
+  </div>
+
+  <div class="endpoint">
+    <h2>✏️ PUT /students/&lt;id&gt;</h2>
+    <input id="putId" placeholder="Student ID" />
+    <textarea id="putData">{ "name": "Bob", "age": 24 }</textarea>
+    <button onclick="putStudent()">Update Student</button>
+    <pre id="putResult"></pre>
+  </div>
+
+  <div class="endpoint">
+    <h2>🗑️ DELETE /students/&lt;id&gt;</h2>
+    <input id="deleteId" placeholder="Student ID" />
+    <button onclick="deleteStudent()">Delete Student</button>
+    <pre id="deleteResult"></pre>
+  </div>
+
+  <div class="endpoint">
+    <h2>🔍 GET /students/&lt;id&gt;</h2>
+    <input id="getId" placeholder="Student ID" />
+    <button onclick="getStudentById()">Get Student</button>
+    <pre id="getByIdResult"></pre>
+  </div>
+
+  <script>
+    const baseURL = "http://localhost:8000";
+
+    async function getStudents() {
+      const res = await fetch(`${baseURL}/students`);
+      document.getElementById("getResult").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+
+    async function postStudent() {
+      const data = JSON.parse(document.getElementById("postData").value);
+      const res = await fetch(`${baseURL}/students`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      document.getElementById("postResult").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+
+    async function putStudent() {
+      const id = document.getElementById("putId").value;
+      const data = JSON.parse(document.getElementById("putData").value);
+      const res = await fetch(`${baseURL}/students/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      document.getElementById("putResult").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+
+    async function deleteStudent() {
+      const id = document.getElementById("deleteId").value;
+      const res = await fetch(`${baseURL}/students/${id}`, { method: "DELETE" });
+      document.getElementById("deleteResult").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+
+    async function getStudentById() {
+      const id = document.getElementById("getId").value;
+      const res = await fetch(`${baseURL}/students/${id}`);
+      document.getElementById("getByIdResult").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+  </script>
+</body>
+</html>
