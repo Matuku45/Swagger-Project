@@ -8,11 +8,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application
+# Copy application files
 COPY main.py .
 
-# Expose FastAPI port
-EXPOSE 8000
+# Expose port (Flask default is 5000)
+EXPOSE 5000
 
-# Start FastAPI app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run Flask app
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
