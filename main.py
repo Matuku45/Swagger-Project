@@ -3,19 +3,19 @@ from flask_restful import Api, Resource
 from flasgger import Swagger
 
 app = Flask(__name__)
-api = Api(app)
 swagger = Swagger(app)
+api = Api(app)  # moved after swagger initialization
+
+# Fix: Define a root route to redirect to Swagger UI
+@app.route('/')
+def index():
+    return redirect('/apidocs')  # or '/apidocs/' for strict slash rules
 
 # In-memory data store
 employees_data = [
     {'id': 1, 'name': 'Abhilash Gaurav'},
     {'id': 2, 'name': 'Ramish Verma'}
 ]
-
-# Redirect root to Swagger UI
-@app.route('/')
-def root():
-    return redirect('/apidocs')
 
 class EmployeesResource(Resource):
     def get(self):
@@ -124,7 +124,7 @@ class EmployeeResource(Resource):
                 return {'message': 'Employee deleted successfully', 'employee': deleted_employee}, 200
         return {'message': 'Employee not found'}, 404
 
-# Add resources to API
+# Register endpoints
 api.add_resource(EmployeesResource, '/employees')
 api.add_resource(EmployeeResource, '/employee/<int:employee_id>')
 
